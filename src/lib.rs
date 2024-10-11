@@ -1,5 +1,3 @@
-pub mod ecs;
-
 mod component;
 mod system;
 
