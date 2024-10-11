@@ -1,4 +1,4 @@
-use crate::ecs::component::{ComponentCheck, Components};
+use crate::component::{ComponentCheck, Components};
 
 pub enum System {
     Registered(&'static str),

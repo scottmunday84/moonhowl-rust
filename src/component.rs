@@ -1,6 +1,6 @@
 use std::any::{Any, TypeId};
 use std::collections::{HashMap, HashSet};
-use crate::ecs::system::System;
+use crate::system::System;
 
 static UNREGISTERED_SYSTEM: System = System::Unregistered;
 
