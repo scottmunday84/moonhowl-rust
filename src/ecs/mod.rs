@@ -1,7 +1,7 @@
 mod component;
 mod system;
 
-pub(crate) mod preamble {
+pub mod preamble {
     use crate::ecs::component;
     use crate::ecs::system;
 
