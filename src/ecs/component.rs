@@ -1,6 +1,6 @@
+use crate::ecs::system::System;
 use std::any::{Any, TypeId};
 use std::collections::{HashMap, HashSet};
-use crate::system::System;
 
 static UNREGISTERED_SYSTEM: System = System::Unregistered;
 
@@ -42,8 +42,11 @@ impl Components  {
         }
     }
 
-    pub fn get_unregistered_component<T: IComponent>(&mut self) -> Option<&T> {
-        self.get_component(&UNREGISTERED_SYSTEM)
+    pub fn get_unregistered_component<T: IComponent>(&self) -> Option<&T> {
+        match self.components.get(&TypeId::of::<T>()) {
+            Some(component) => (**component).downcast_ref::<T>(),
+            None => None
+        }
     }
 
     pub fn get_component<T: IComponent>(&mut self, system: &System) -> Option<&T> {
