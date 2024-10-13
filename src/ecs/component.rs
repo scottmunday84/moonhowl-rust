@@ -8,14 +8,14 @@ pub trait IComponent: Any {}
 
 pub struct Components {
     components: HashMap<TypeId, Box<dyn Any>>,
-    registered_components: HashMap<TypeId, HashSet<&'static str>>
+    registered_components: HashMap<TypeId, HashSet<&'static str>>,
 }
 
-impl Components  {
+impl Components {
     pub fn new() -> Self {
         Self {
             components: HashMap::new(),
-            registered_components: HashMap::new()
+            registered_components: HashMap::new(),
         }
     }
 
@@ -35,17 +35,17 @@ impl Components  {
 
                 match registered_components.get(&TypeId::of::<T>()) {
                     Some(registered_component) => !registered_component.contains(name),
-                    None => true
+                    None => true,
                 }
             }
-            System::Unregistered => components.contains_key(&TypeId::of::<T>())
+            System::Unregistered => components.contains_key(&TypeId::of::<T>()),
         }
     }
 
     pub fn get_unregistered_component<T: IComponent>(&self) -> Option<&T> {
         match self.components.get(&TypeId::of::<T>()) {
             Some(component) => (**component).downcast_ref::<T>(),
-            None => None
+            None => None,
         }
     }
 
@@ -59,27 +59,26 @@ impl Components  {
                     Some(component) => {
                         match registered_components.get_mut(&TypeId::of::<T>()) {
                             Some(registered_component) => registered_component.insert(name),
-                            None => false  // Should never reach
+                            None => false, // Should never reach
                         };
 
                         (**component).downcast_ref::<T>()
-                    },
-                    None => None
-                }
-            },
-            System::Unregistered => {
-                match components.get(&TypeId::of::<T>()) {
-                    Some(component) => (**component).downcast_ref::<T>(),
-                    None => None
+                    }
+                    None => None,
                 }
             }
+            System::Unregistered => match components.get(&TypeId::of::<T>()) {
+                Some(component) => (**component).downcast_ref::<T>(),
+                None => None,
+            },
         }
     }
 
     pub fn add_component<T: IComponent>(&mut self, component: T) -> &mut Self {
         let boxed_component = Box::new(component);
         self.components.insert(TypeId::of::<T>(), boxed_component);
-        self.registered_components.insert(TypeId::of::<T>(), HashSet::new());
+        self.registered_components
+            .insert(TypeId::of::<T>(), HashSet::new());
 
         self
     }
@@ -91,24 +90,30 @@ impl Components  {
         self
     }
 
-    pub fn check<F>(&self, test_fnc: F) -> ComponentCheck where F: FnOnce(&Components) -> bool {
+    pub fn check<F>(&self, test_fnc: F) -> ComponentCheck
+    where
+        F: FnOnce(&Components) -> bool,
+    {
         match test_fnc(&self) {
             true => ComponentCheck::Valid,
-            false => ComponentCheck::Invalid
+            false => ComponentCheck::Invalid,
         }
     }
 }
 
 pub enum ComponentCheck {
     Valid,
-    Invalid
+    Invalid,
 }
 
 impl ComponentCheck {
-    pub fn then_run_system<F>(&self, run_fnc: F) where F: FnOnce() {
+    pub fn then_run_system<F>(&self, run_fnc: F)
+    where
+        F: FnOnce(),
+    {
         match self {
             ComponentCheck::Valid => run_fnc(),
-            ComponentCheck::Invalid => ()
+            ComponentCheck::Invalid => (),
         }
     }
 }
