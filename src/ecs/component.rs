@@ -87,11 +87,11 @@ impl Components {
         self
     }
 
-    pub fn check<F>(&self, test_fnc: F) -> ComponentCheck
+    pub fn check<F>(&self, check_fnc: F) -> ComponentCheck
     where
         F: FnOnce(&Components) -> bool,
     {
-        match test_fnc(&self) {
+        match check_fnc(&self) {
             true => ComponentCheck::Valid,
             false => ComponentCheck::Invalid,
         }
@@ -104,7 +104,7 @@ pub enum ComponentCheck {
 }
 
 impl ComponentCheck {
-    pub fn then_run_system<F>(&self, run_fnc: F)
+    pub fn then<F>(&self, run_fnc: F)
     where
         F: FnOnce(),
     {
