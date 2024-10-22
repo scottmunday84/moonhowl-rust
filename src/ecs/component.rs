@@ -67,10 +67,7 @@ impl Components {
                     None => None,
                 }
             }
-            System::Unregistered => match components.get(&TypeId::of::<T>()) {
-                Some(component) => (**component).downcast_ref::<T>(),
-                None => None,
-            },
+            System::Unregistered => self.get_unregistered_component()
         }
     }
 
