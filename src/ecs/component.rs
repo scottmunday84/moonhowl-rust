@@ -67,7 +67,7 @@ impl Components {
                     None => None,
                 }
             }
-            System::Unregistered => self.get_unregistered_component(),
+            System::Unregistered => self.get_unregistered_component::<T>(),
         }
     }
 
