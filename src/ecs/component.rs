@@ -103,12 +103,12 @@ pub enum ComponentCheck {
 }
 
 impl ComponentCheck {
-    pub fn then<F>(&self, run_fnc: F)
+    pub fn then<F>(&self, then_fnc: F)
     where
         F: FnOnce(),
     {
         match self {
-            ComponentCheck::Valid => run_fnc(),
+            ComponentCheck::Valid => then_fnc(),
             ComponentCheck::Invalid => (),
         }
     }
