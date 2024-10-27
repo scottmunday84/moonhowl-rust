@@ -59,7 +59,7 @@ impl Components {
                     Some(component) => {
                         match registered_components.get_mut(&TypeId::of::<T>()) {
                             Some(registered_component) => registered_component.insert(name),
-                            None => false, // Should never reach
+                            None => false, // Will never happen
                         };
 
                         (**component).downcast_ref::<T>()
@@ -74,8 +74,7 @@ impl Components {
     pub fn add_component<T: IComponent>(&mut self, component: T) -> &mut Self {
         let boxed_component = Box::new(component);
         self.components.insert(TypeId::of::<T>(), boxed_component);
-        self.registered_components
-            .insert(TypeId::of::<T>(), HashSet::new());
+        self.registered_components.insert(TypeId::of::<T>(), HashSet::new());
 
         self
     }
