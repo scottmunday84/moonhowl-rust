@@ -20,7 +20,7 @@ impl Components {
     }
 
     pub fn has_unregistered_component<T: IComponent>(&self) -> bool {
-        self.has_component::<T>(&UNREGISTERED_SYSTEM)
+        self.components.contains_key(&TypeId::of::<T>())
     }
 
     pub fn has_component<T: IComponent>(&self, system: &System) -> bool {
@@ -38,7 +38,7 @@ impl Components {
                     None => true,
                 }
             }
-            System::Unregistered => components.contains_key(&TypeId::of::<T>()),
+            System::Unregistered => self.has_unregistered_component::<T>(),
         }
     }
 
