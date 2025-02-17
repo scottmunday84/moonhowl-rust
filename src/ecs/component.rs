@@ -19,11 +19,11 @@ impl Components {
         }
     }
 
-    pub fn has_unregistered_component<T: IComponent>(&self) -> bool {
+    pub fn has_component<T: IComponent>(&self) -> bool {
         self.components.contains_key(&TypeId::of::<T>())
     }
 
-    pub fn has_component<T: IComponent>(&self, system: &System) -> bool {
+    pub fn has_system_component<T: IComponent>(&self, system: &System) -> bool {
         let components = &self.components;
         let registered_components = &self.registered_components;
 
@@ -38,18 +38,18 @@ impl Components {
                     None => true,
                 }
             }
-            System::Unregistered => self.has_unregistered_component::<T>(),
+            System::Unregistered => self.has_component::<T>(),
         }
     }
 
-    pub fn get_unregistered_component<T: IComponent>(&self) -> Option<&T> {
+    pub fn get_component<T: IComponent>(&self) -> Option<&T> {
         match self.components.get(&TypeId::of::<T>()) {
             Some(component) => (**component).downcast_ref::<T>(),
             None => None,
         }
     }
 
-    pub fn get_component<T: IComponent>(&mut self, system: &System) -> Option<&T> {
+    pub fn get_system_component<T: IComponent>(&mut self, system: &System) -> Option<&T> {
         let components = &self.components;
         let registered_components = &mut self.registered_components;
 
@@ -67,7 +67,7 @@ impl Components {
                     None => None,
                 }
             }
-            System::Unregistered => self.get_unregistered_component::<T>(),
+            System::Unregistered => self.get_component::<T>(),
         }
     }
 
@@ -79,7 +79,7 @@ impl Components {
         self
     }
 
-    pub fn remove_component<T: IComponent>(&mut self) -> &mut Self {
+    pub fn drop_component<T: IComponent>(&mut self) -> &mut Self {
         self.components.remove(&TypeId::of::<T>());
         self.registered_components.remove(&TypeId::of::<T>());
 
