@@ -74,7 +74,8 @@ impl Components {
     pub fn add_component<T: IComponent>(&mut self, component: T) -> &mut Self {
         let boxed_component = Box::new(component);
         self.components.insert(TypeId::of::<T>(), boxed_component);
-        self.registered_components.insert(TypeId::of::<T>(), HashSet::new());
+        self.registered_components
+            .insert(TypeId::of::<T>(), HashSet::new());
 
         self
     }
@@ -112,4 +113,24 @@ impl ComponentCheck {
             ComponentCheck::Invalid => (),
         }
     }
+}
+
+#[macro_export]
+macro_rules! has_component {
+    ($components:expr, $comp:ty) => {
+        $components.has_component::<$comp>()
+    };
+    ($components:expr, $comp:ty, $system:expr) => {
+        $components.has_system_component::<$comp>($system)
+    };
+}
+
+#[macro_export]
+macro_rules! get_component {
+    ($components:expr, $comp:ty) => {
+        $components.get_component::<$comp>()
+    };
+    ($components:expr, $comp:ty, $system:expr) => {
+        $components.get_system_component::<$comp>($system)
+    };
 }
