@@ -2,8 +2,6 @@ use crate::ecs::system::System;
 use std::any::{Any, TypeId};
 use std::collections::{HashMap, HashSet};
 
-static UNREGISTERED_SYSTEM: System = System::Unregistered;
-
 pub trait IComponent: Any {}
 
 pub struct Components {
@@ -28,13 +26,13 @@ impl Components {
         let registered_components = &self.registered_components;
 
         match system {
-            System::Registered(name) => {
+            System::Registered(system_name) => {
                 if !components.contains_key(&TypeId::of::<T>()) {
                     return false;
                 }
 
                 match registered_components.get(&TypeId::of::<T>()) {
-                    Some(registered_component) => !registered_component.contains(name),
+                    Some(registered_component) => !registered_component.contains(system_name),
                     None => true,
                 }
             }
@@ -54,11 +52,11 @@ impl Components {
         let registered_components = &mut self.registered_components;
 
         match system {
-            System::Registered(name) => {
+            System::Registered(system_name) => {
                 match components.get(&TypeId::of::<T>()) {
                     Some(component) => {
                         match registered_components.get_mut(&TypeId::of::<T>()) {
-                            Some(registered_component) => registered_component.insert(name),
+                            Some(registered_component) => registered_component.insert(system_name),
                             None => false, // Will never happen
                         };
 
