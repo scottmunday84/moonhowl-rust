@@ -4,7 +4,6 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 
 pub enum System {
     Registered(usize),
-    Unregistered,
 }
 
 impl System {
@@ -24,7 +23,6 @@ impl System {
 
         match self {
             System::Registered(id) => entity.has_registered_component::<T>(id),
-            System::Unregistered => true,
         }
     }
 
@@ -35,7 +33,6 @@ impl System {
 
         match self {
             System::Registered(id) => entity.get_registered_component::<T>(id),
-            System::Unregistered => entity.get_component::<T>(),
         }
     }
 }
