@@ -1,6 +1,5 @@
 use crate::ecs::component::IComponent;
 use crate::ecs::prelude::Entity;
-use std::any::TypeId;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 pub enum System {

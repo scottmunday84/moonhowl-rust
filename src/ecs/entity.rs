@@ -1,4 +1,4 @@
-use crate::ecs::prelude::{ComponentCheck, IComponent};
+use crate::ecs::prelude::IComponent;
 use std::any::{Any, TypeId};
 use std::collections::{HashMap, HashSet};
 
@@ -66,13 +66,30 @@ impl Entity {
         self
     }
 
-    pub fn check<F>(&self, check_fnc: F) -> ComponentCheck
+    pub fn check<F>(&self, check_fnc: F) -> EntityCheck
     where
         F: FnOnce(&Entity) -> bool,
     {
         match check_fnc(&self) {
-            true => ComponentCheck::Valid,
-            false => ComponentCheck::Invalid,
+            true => EntityCheck::On,
+            false => EntityCheck::Off,
+        }
+    }
+}
+
+pub enum EntityCheck {
+    On,
+    Off,
+}
+
+impl EntityCheck {
+    pub fn then<F>(&self, then_fnc: F)
+    where
+        F: FnOnce(),
+    {
+        match self {
+            EntityCheck::On => then_fnc(),
+            EntityCheck::Off => (),
         }
     }
 }
