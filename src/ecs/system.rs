@@ -8,13 +8,13 @@ pub enum System {
 }
 
 impl System {
+    pub fn new() -> Self {
+        System::Registered(Self::get_id())
+    }
+
     fn get_id() -> usize {
         static COUNTER: AtomicUsize = AtomicUsize::new(1);
         COUNTER.fetch_add(1, Ordering::Relaxed)
-    }
-
-    pub fn new_registered() -> Self {
-        System::Registered(Self::get_id())
     }
 
     pub fn has_component<T: IComponent>(&self, entity: &Entity) -> bool {
