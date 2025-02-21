@@ -18,21 +18,13 @@ impl System {
     }
 
     pub fn has_component<T: IComponent>(&self, entity: &Entity) -> bool {
-        if !entity.has_component::<T>() {
-            return false;
-        }
-
         match self {
             System::Registered(id) => entity.has_registered_component::<T>(id),
-            System::Unregistered => true,
+            System::Unregistered => entity.has_component::<T>(),
         }
     }
 
     pub fn get_component<'a, T: IComponent>(&self, entity: &'a mut Entity) -> Option<&'a T> {
-        if !entity.has_component::<T>() {
-            return None;
-        }
-
         match self {
             System::Registered(id) => entity.get_registered_component::<T>(id),
             System::Unregistered => entity.get_component::<T>(),
