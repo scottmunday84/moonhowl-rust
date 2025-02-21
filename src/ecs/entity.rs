@@ -53,7 +53,8 @@ impl Entity {
     pub fn add_component<T: IComponent>(&mut self, component: T) -> &mut Self {
         let boxed_component = Box::new(component);
         self.components.insert(TypeId::of::<T>(), boxed_component);
-        self.registered_components.insert(TypeId::of::<T>(), HashSet::new());
+        self.registered_components
+            .insert(TypeId::of::<T>(), HashSet::new());
 
         self
     }
