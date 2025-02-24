@@ -87,9 +87,8 @@ impl EntityCheck {
     where
         F: FnOnce(),
     {
-        match self {
-            EntityCheck::On => then_fnc(),
-            EntityCheck::Off => (),
+        if let EntityCheck::On = self {
+            then_fnc();
         }
     }
 }
