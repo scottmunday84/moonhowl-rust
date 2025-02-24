@@ -3,7 +3,7 @@ use std::any::{Any, TypeId};
 use std::collections::{HashMap, HashSet};
 
 pub struct Entity {
-    components: HashMap<TypeId, Box<dyn Any>>,
+    components: HashMap<TypeId, Box<dyn IComponent>>,
     registered_components: HashMap<TypeId, HashSet<usize>>,
 }
 
@@ -33,7 +33,7 @@ impl Entity {
 
     pub fn get_component<T: IComponent>(&self) -> Option<&T> {
         match self.components.get(&TypeId::of::<T>()) {
-            Some(component) => (**component).downcast_ref::<T>(),
+            Some(component) => (**component).as_any().downcast_ref::<T>(),
             None => None,
         }
     }
