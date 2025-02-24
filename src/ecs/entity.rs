@@ -93,17 +93,17 @@ impl EntityCheck {
     }
 }
 
-pub enum EntitySystem<'a, 'b> {
-    Reader(&'a Entity, &'b System),
-    Writer(&'a mut Entity, &'b System),
+pub enum EntitySystem<'a> {
+    Reader(&'a Entity, &'a System),
+    Writer(&'a mut Entity, &'a System),
 }
 
-impl <'a, 'b> EntitySystem<'a, 'b> {
-    pub fn new_reader(entity: &'a Entity, system: &'b System) -> Self {
+impl <'a> EntitySystem<'a> {
+    pub fn new_reader(entity: &'a Entity, system: &'a System) -> Self {
         Self::Reader(entity, system)
     }
     
-    pub fn new_writer(entity: &'a mut Entity, system: &'b System) -> Self {
+    pub fn new_writer(entity: &'a mut Entity, system: &'a System) -> Self {
         Self::Writer(entity, system)
     }
 
