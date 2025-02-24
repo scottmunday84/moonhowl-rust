@@ -1,5 +1,5 @@
-use crate::ecs::prelude::IComponent;
-use std::any::{Any, TypeId};
+use crate::ecs::prelude::{IComponent, System};
+use std::any::TypeId;
 use std::collections::{HashMap, HashSet};
 
 pub struct Entity {
@@ -90,5 +90,35 @@ impl EntityCheck {
         if let EntityCheck::On = self {
             then_fnc();
         }
+    }
+}
+
+pub enum EntitySystem<'a, 'b> {
+    Reader(&'a Entity, &'b System),
+    Writer(&'a mut Entity, &'b System),
+}
+
+impl <'a, 'b> EntitySystem<'a, 'b> {
+    pub fn new_reader(entity: &'a Entity, system: &'b System) -> Self {
+        Self::Reader(entity, system)
+    }
+    
+    pub fn new_writer(entity: &'a mut Entity, system: &'b System) -> Self {
+        Self::Writer(entity, system)
+    }
+
+    pub fn has_component<T: IComponent>(&self) -> bool {
+        match self {
+            EntitySystem::Reader(entity, system) => system.has_component::<T>(entity),
+            EntitySystem::Writer(entity, system) => system.has_component::<T>(entity),
+        }
+    }
+    
+    pub fn get_component<T: IComponent>(&mut self) -> Option<&T> {
+        if let EntitySystem::Writer(entity, system) = self {
+            return system.get_component::<T>(entity);
+        }
+        
+        None
     }
 }
