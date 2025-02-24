@@ -24,10 +24,11 @@ impl Entity {
             return false;
         }
 
-        match self.registered_components.get(&TypeId::of::<T>()) {
-            Some(registered_component) => !registered_component.contains(id),
-            None => true, // Should never happen
+        if let Some(registered_component) = self.registered_components.get(&TypeId::of::<T>()) {
+            return !registered_component.contains(id);
         }
+
+        true
     }
 
     pub fn get_component<T: IComponent>(&self) -> Option<&T> {
@@ -42,9 +43,8 @@ impl Entity {
             return None;
         }
 
-        match self.registered_components.get_mut(&TypeId::of::<T>()) {
-            Some(registered_component) => registered_component.insert(*id),
-            None => false, // Should never happen
+        if let Some(registered_component) = self.registered_components.get_mut(&TypeId::of::<T>()) {
+            registered_component.insert(*id);
         };
 
         self.get_component::<T>()
