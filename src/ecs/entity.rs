@@ -108,10 +108,9 @@ impl <'a> EntitySystem<'a> {
     }
     
     pub fn get_component<T: IComponent>(&mut self) -> Option<&T> {
-        if let EntitySystem::Writer(entity, system) = self {
-            return system.get_component::<T>(entity);
+        match self {
+            EntitySystem::Reader(entity, system) => entity.get_component::<T>(),
+            EntitySystem::Writer(entity, system) => system.get_component::<T>(entity),
         }
-        
-        None
     }
 }
