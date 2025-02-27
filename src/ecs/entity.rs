@@ -65,23 +65,23 @@ impl Entity {
         self
     }
 
-    pub fn check<F>(&self, check_fnc: F) -> EntityCheck
+    pub fn check<F>(&self, predicate: F) -> EntityCheck
     where
         F: FnOnce(&Entity) -> bool,
     {
-        EntityCheck(check_fnc(&self))
+        EntityCheck(predicate(&self))
     }
 }
 
 pub struct EntityCheck(bool);
 
 impl EntityCheck {
-    pub fn then<F>(&self, then_fnc: F)
+    pub fn and_then<F>(&self, callback: F)
     where
         F: FnOnce(),
     {
         if self.0 {
-            then_fnc();
+            callback();
         }
     }
 }
