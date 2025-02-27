@@ -32,10 +32,9 @@ impl Entity {
     }
 
     pub fn get_component<T: IComponent>(&self) -> Option<&T> {
-        match self.components.get(&TypeId::of::<T>()) {
-            Some(component) => (**component).as_any().downcast_ref::<T>(),
-            None => None,
-        }
+        self.components
+            .get(&TypeId::of::<T>())
+            .and_then(|component| (**component).as_any().downcast_ref::<T>())
     }
 
     pub fn get_registered_component<T: IComponent>(&mut self, id: &usize) -> Option<&T> {
@@ -70,24 +69,18 @@ impl Entity {
     where
         F: FnOnce(&Entity) -> bool,
     {
-        match check_fnc(&self) {
-            true => EntityCheck::On,
-            false => EntityCheck::Off,
-        }
+        EntityCheck(check_fnc(&self))
     }
 }
 
-pub enum EntityCheck {
-    On,
-    Off,
-}
+pub struct EntityCheck(bool);
 
 impl EntityCheck {
     pub fn then<F>(&self, then_fnc: F)
     where
         F: FnOnce(),
     {
-        if let EntityCheck::On = self {
+        if self.0 {
             then_fnc();
         }
     }
