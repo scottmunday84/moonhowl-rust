@@ -78,20 +78,13 @@ pub enum EntitySystem<'a> {
     Writer(&'a mut Entity, &'a System),
 }
 
-impl <'a> EntitySystem<'a> {
+impl<'a> EntitySystem<'a> {
     pub fn new_reader(entity: &'a Entity, system: &'a System) -> Self {
         Self::Reader(entity, system)
     }
-    
+
     pub fn new_writer(entity: &'a mut Entity, system: &'a System) -> Self {
         Self::Writer(entity, system)
-    }
-
-    pub fn check<F>(&self, predicate: F) -> EntityCheck
-    where
-        F: FnOnce(&EntitySystem) -> bool,
-    {
-        EntityCheck(predicate(&self))
     }
 
     pub fn has_component<T: IComponent>(&self) -> bool {
@@ -100,12 +93,19 @@ impl <'a> EntitySystem<'a> {
             EntitySystem::Writer(entity, system) => system.has_component::<T>(entity),
         }
     }
-    
+
     pub fn get_component<T: IComponent>(&mut self) -> Option<&T> {
         match self {
             EntitySystem::Reader(entity, system) => entity.get_component::<T>(),
             EntitySystem::Writer(entity, system) => system.get_component::<T>(entity),
         }
+    }
+
+    pub fn check<F>(&self, predicate: F) -> EntityCheck
+    where
+        F: FnOnce(&EntitySystem) -> bool,
+    {
+        EntityCheck(predicate(&self))
     }
 }
 

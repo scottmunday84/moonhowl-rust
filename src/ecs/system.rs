@@ -13,9 +13,9 @@ impl System {
         static COUNTER: AtomicUsize = AtomicUsize::new(1);
         COUNTER.fetch_add(1, Ordering::Relaxed)
     }
-    
+
     pub fn get_id(&self) -> &usize {
-        &self.0    
+        &self.0
     }
 
     pub fn has_component<T: IComponent>(&self, entity: &Entity) -> bool {
