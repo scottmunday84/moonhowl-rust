@@ -73,19 +73,6 @@ impl Entity {
     }
 }
 
-pub struct EntityCheck(bool);
-
-impl EntityCheck {
-    pub fn and_then<F>(&self, callback: F)
-    where
-        F: FnOnce(),
-    {
-        if self.0 {
-            callback();
-        }
-    }
-}
-
 pub enum EntitySystem<'a> {
     Reader(&'a Entity, &'a System),
     Writer(&'a mut Entity, &'a System),
@@ -100,6 +87,13 @@ impl <'a> EntitySystem<'a> {
         Self::Writer(entity, system)
     }
 
+    pub fn check<F>(&self, predicate: F) -> EntityCheck
+    where
+        F: FnOnce(&EntitySystem) -> bool,
+    {
+        EntityCheck(predicate(&self))
+    }
+
     pub fn has_component<T: IComponent>(&self) -> bool {
         match self {
             EntitySystem::Reader(entity, system) => system.has_component::<T>(entity),
@@ -111,6 +105,19 @@ impl <'a> EntitySystem<'a> {
         match self {
             EntitySystem::Reader(entity, system) => entity.get_component::<T>(),
             EntitySystem::Writer(entity, system) => system.get_component::<T>(entity),
+        }
+    }
+}
+
+pub struct EntityCheck(bool);
+
+impl EntityCheck {
+    pub fn and_then<F>(&self, callback: F)
+    where
+        F: FnOnce(),
+    {
+        if self.0 {
+            callback();
         }
     }
 }
