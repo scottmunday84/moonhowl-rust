@@ -1,4 +1,4 @@
-use crate::ecs::prelude::{IComponent, System};
+use crate::component::{IComponent, System};
 use std::any::TypeId;
 use std::collections::{HashMap, HashSet};
 

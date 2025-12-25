@@ -1,5 +1,5 @@
-use crate::ecs::component::IComponent;
-use crate::ecs::prelude::Entity;
+use crate::component::IComponent;
+use crate::entity::Entity;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 pub struct System(usize);
