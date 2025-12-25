@@ -1,4 +1,5 @@
-use crate::component::{IComponent, System};
+use crate::component::IComponent;
+use crate::system::System;
 use std::any::TypeId;
 use std::collections::{HashMap, HashSet};
 
