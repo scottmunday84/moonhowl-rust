@@ -1,6 +1,4 @@
-pub use proc_macro::TokenStream;
-pub use quote::quote;
-pub use syn::{ItemStruct, parse_macro_input};
+use crate::prelude::*;
 
 #[proc_macro_attribute]
 pub fn ecs_component(_attr: TokenStream, item: TokenStream) -> TokenStream {
