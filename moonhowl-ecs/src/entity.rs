@@ -97,7 +97,7 @@ impl<'a> EntitySystem<'a> {
 
     pub fn get_component<T: IComponent>(&mut self) -> Option<&T> {
         match self {
-            EntitySystem::Reader(entity, system) => entity.get_component::<T>(),
+            EntitySystem::Reader(entity, system) => system.get_component::<T>(entity),
             EntitySystem::Writer(entity, system) => system.get_component::<T>(entity),
         }
     }
