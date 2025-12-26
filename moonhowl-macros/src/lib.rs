@@ -3,7 +3,7 @@ pub use quote::quote;
 pub use syn::{parse_macro_input, ItemStruct};
 
 #[proc_macro_attribute]
-pub fn ecs_component(_attr: TokenStream, item: TokenStream) -> TokenStream {
+pub fn component(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let input = parse_macro_input!(item as ItemStruct);
     let name = &input.ident;
 
