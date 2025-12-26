@@ -1,7 +1,7 @@
-mod entity;
 mod component;
+mod entity;
 mod system;
 
-pub use entity::Entity;
 pub use component::IComponent;
+pub use entity::Entity;
 pub use system::System;
