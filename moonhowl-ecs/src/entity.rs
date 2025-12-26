@@ -39,7 +39,7 @@ impl Entity {
     }
 
     pub fn get_registered_component<T: IComponent>(&mut self, id: &usize) -> Option<&T> {
-        if !self.has_component::<T>(id) {
+        if !self.has_component::<T>() {
             return None;
         }
 
