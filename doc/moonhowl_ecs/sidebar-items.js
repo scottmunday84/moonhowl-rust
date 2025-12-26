@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["EntitySystem"],"struct":["Entity","System"],"trait":["IComponent"]};
