@@ -121,12 +121,14 @@ impl<'a> EntitySystem<'a> {
 pub struct EntityCheck(bool);
 
 impl EntityCheck {
-    pub fn and_then<F>(&self, callback: F)
+    pub fn and_then<F>(&self, callback: F) -> &Self
     where
         F: FnOnce(),
     {
         if self.0 {
             callback();
         }
+
+        self
     }
 }
