@@ -58,7 +58,7 @@ impl Entity {
         self.get_component::<T>()
     }
 
-    pub fn add_component<T: IComponent>(&mut self, component: T) -> &mut Self {
+    pub fn push_component<T: IComponent>(&mut self, component: T) -> &mut Self {
         let boxed_component = Box::new(component);
         self.components.insert(TypeId::of::<T>(), boxed_component);
         self.registered_components
@@ -67,7 +67,7 @@ impl Entity {
         self
     }
 
-    pub fn drop_component<T: IComponent>(&mut self) -> &mut Self {
+    pub fn pull_component<T: IComponent>(&mut self) -> &mut Self {
         self.components.remove(&TypeId::of::<T>());
         self.registered_components.remove(&TypeId::of::<T>());
 
