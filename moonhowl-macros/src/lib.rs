@@ -1,4 +1,3 @@
-use moonhowl_ecs::IComponent;
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, ItemStruct};
@@ -11,7 +10,7 @@ pub fn ecs_component(_attr: TokenStream, item: TokenStream) -> TokenStream {
     quote! {
         #input
 
-        impl IComponent for #name {
+        impl moonhowl_ecs::IComponent for #name {
             fn as_any(&self) -> &dyn std::any::Any {
                 self
             }
