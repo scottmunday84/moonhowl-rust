@@ -20,12 +20,6 @@ impl Entity {
         self.components.contains_key(&TypeId::of::<T>())
     }
 
-    pub fn get_component<T: IComponent>(&self) -> Option<&T> {
-        self.components
-            .get(&TypeId::of::<T>())
-            .and_then(|component| (**component).as_any().downcast_ref::<T>())
-    }
-
     pub fn has_registered_component<T: IComponent>(&self, id: &usize) -> bool {
         if !self.has_component::<T>() {
             return false;
@@ -38,16 +32,14 @@ impl Entity {
         true
     }
 
-    pub fn get_registered_component_readonly<T: IComponent>(&self, id: &usize) -> Option<&T> {
-        if !self.has_registered_component::<T>(id) {
-            return None;
-        }
-
-        self.get_component::<T>()
+    pub fn get_component<T: IComponent>(&self) -> Option<&T> {
+        self.components
+            .get(&TypeId::of::<T>())
+            .and_then(|component| (**component).as_any().downcast_ref::<T>())
     }
 
     pub fn get_registered_component<T: IComponent>(&mut self, id: &usize) -> Option<&T> {
-        if !self.has_registered_component::<T>(id) {
+        if !self.has_component::<T>(id) {
             return None;
         }
 
@@ -105,7 +97,7 @@ impl<'a> EntitySystem<'a> {
 
     pub fn get_component<T: IComponent>(&mut self) -> Option<&T> {
         match self {
-            EntitySystem::Reader(entity, system) => system.get_component_readonly::<T>(entity),
+            EntitySystem::Reader(entity, system) => entity.get_component::<T>(),
             EntitySystem::Writer(entity, system) => system.get_component::<T>(entity),
         }
     }
