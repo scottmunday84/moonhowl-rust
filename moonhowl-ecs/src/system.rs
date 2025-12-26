@@ -22,6 +22,10 @@ impl System {
         entity.has_registered_component::<T>(&self.0)
     }
 
+    pub fn get_component_readonly<'a, T: IComponent>(&self, entity: &'a Entity) -> Option<&'a T> {
+        entity.get_registered_component_readonly::<T>(&self.0)
+    }
+
     pub fn get_component<'a, T: IComponent>(&self, entity: &'a mut Entity) -> Option<&'a T> {
         entity.get_registered_component::<T>(&self.0)
     }
