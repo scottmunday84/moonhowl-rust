@@ -1,3 +1,3 @@
-mod ecs_component;
+mod ecs_macros;
 
-pub use ecs_component::ecs_component;
+pub use ecs_macros::*;
